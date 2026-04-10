@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<!--
+  product.html — OneStop Shop
+  Features:
+    - Real Unsplash product photos
+    - Quantity selector (1-10) per product
+    - Cart persisted in sessionStorage (survives Back navigation)
+    - Urgency bar hidden until cart has items; expiry fires exit popup
+    - Exit-intent popup: fires immediately on mouseleave, only when cart has items
+    - Tab-switch detection with same rule
+    - Passive nudge after 15s if cart still empty
+
+  References
+  1. Google. (2019). Google Fonts. Google Fonts. https://fonts.google.com/
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OneStop Shop</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="logo">OneStop</div>
+    <div class="trust-bar">
+      <span>🔒 Secure Checkout</span>
+      <span>🚚 Free Shipping Over $60</span>
+      <span>↩️ 30-Day Returns</span>
+    </div>
+  </header>
+
+  <!-- Urgency bar — hidden until cart has items -->
+  <div id="urgencyBarWrap">
+    <div id="urgencyBar"></div>
+    <span id="urgencyLabel">🛒 Your cart is reserved</span>
+  </div>
+
+  <div class="shop-hero">
+    <h1>Shop</h1>
+    <p>Select a quantity and add items to your cart</p>
+  </div>
+
+  <div class="product-grid">
+
+    <!-- Headphones -->
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSr_iOnrsZG0AN5e49vfMG3us5zcCtIaDsKsisaQUywcmleS1AhaLrNo7R0ADvOuA8c2ysGd6ojcHil8k0X9UqXwzLbpTVk-406hF_LIY4Bye9KK37pbPR1g6Q" alt="Pro Wireless Headphones" loading="lazy">
+        <span class="product-badge badge-hot">Bestseller</span>
+      </div>
+      <div class="product-info">
+        <div class="stars">★★★★★ <span class="rating-count">(248 reviews)</span></div>
+        <h3>Pro Wireless Headphones</h3>
+        <div class="sub">Noise-cancelling · 30hr battery · Black</div>
+        <div class="product-price"><span class="current">$50</span><span class="original">$79</span></div>
+        <div class="product-qty-row">
+          <label>Qty</label>
+          <select class="qty-select" id="qty-Headphones">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          </select>
+        </div>
+        <button class="btn-add"
+          data-name="Headphones" data-price="50"
+          data-img="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSr_iOnrsZG0AN5e49vfMG3us5zcCtIaDsKsisaQUywcmleS1AhaLrNo7R0ADvOuA8c2ysGd6ojcHil8k0X9UqXwzLbpTVk-406hF_LIY4Bye9KK37pbPR1g6Q"
+          onclick="addToCart(this)">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- T-Shirt -->
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://www.prada.com/content/dam/pradanux_products/U/UJN/UJN712/1YDPF0124/UJN712_1YDP_F0124_S_211_SLF.png/_jcr_content/renditions/cq5dam.web.hebebed.1000.1000.jpg" alt="Classic Fit T-Shirt" loading="lazy">
+        <span class="product-badge badge-low">Low Stock</span>
+      </div>
+      <div class="product-info">
+        <div class="stars">★★★★☆ <span class="rating-count">(91 reviews)</span></div>
+        <h3>Classic Fit T-Shirt</h3>
+        <div class="sub">100% Cotton · Medium · Charcoal</div>
+        <div class="product-price"><span class="current">$30</span><span class="original">$45</span></div>
+        <div class="product-qty-row">
+          <label>Qty</label>
+          <select class="qty-select" id="qty-T-Shirt">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          </select>
+        </div>
+        <button class="btn-add"
+          data-name="T-Shirt" data-price="30"
+          data-img="https://www.prada.com/content/dam/pradanux_products/U/UJN/UJN712/1YDPF0124/UJN712_1YDP_F0124_S_211_SLF.png/_jcr_content/renditions/cq5dam.web.hebebed.1000.1000.jpg"
+          onclick="addToCart(this)">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Sneakers -->
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://techwear-australia.com/cdn/shop/files/urban-techwear-shoes-black-side-view.jpg?v=1706679591&width=1946" alt="Urban Runner Sneakers" loading="lazy">
+        <span class="product-badge badge-new">New</span>
+      </div>
+      <div class="product-info">
+        <div class="stars">★★★★★ <span class="rating-count">(57 reviews)</span></div>
+        <h3>Urban Runner Sneakers</h3>
+        <div class="sub">Lightweight · EU 42 · Olive Green</div>
+        <div class="product-price"><span class="current">$95</span><span class="original">$130</span></div>
+        <div class="product-qty-row">
+          <label>Qty</label>
+          <select class="qty-select" id="qty-Sneakers">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          </select>
+        </div>
+        <button class="btn-add"
+          data-name="Sneakers" data-price="95"
+          data-img="https://techwear-australia.com/cdn/shop/files/urban-techwear-shoes-black-side-view.jpg?v=1706679591&width=1946"
+          onclick="addToCart(this)">Add to Cart</button>
+      </div>
+    </div>
+
+    <!-- Backpack -->
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://bellroy-product-images.imgix.net/bellroy_dot_com_gallery_image/AUD/BHRB-BLK-243/0?auto=format&fit=crop&w=1920&h=1920" alt="Everyday Backpack" loading="lazy">
+      </div>
+      <div class="product-info">
+        <div class="stars">★★★★☆ <span class="rating-count">(133 reviews)</span></div>
+        <h3>Everyday Backpack</h3>
+        <div class="sub">20L · Laptop sleeve · Midnight Blue</div>
+        <div class="product-price"><span class="current">$65</span><span class="original">$90</span></div>
+        <div class="product-qty-row">
+          <label>Qty</label>
+          <select class="qty-select" id="qty-Backpack">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          </select>
+        </div>
+        <button class="btn-add"
+          data-name="Backpack" data-price="65"
+          data-img="https://bellroy-product-images.imgix.net/bellroy_dot_com_gallery_image/AUD/BHRB-BLK-243/0?auto=format&fit=crop&w=1920&h=1920"
+          onclick="addToCart(this)">Add to Cart</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Floating cart button -->
+  <button id="cartFloat" onclick="goToCheckout()">
+    🛒 View Cart <span id="cartCount">0</span>
+  </button>
+
+  <div id="addToast">Added to cart!</div>
+
+  <div id="passiveNudge">
+    <button class="close-nudge" onclick="this.parentElement.style.display='none'">✕</button>
+    <strong>Still browsing?</strong><br>Items sell out fast — add to cart to reserve yours.
+  </div>
+
+  <!-- Exit-intent popup — only when cart has items -->
+  <div id="overlay" class="hidden" onclick="closeExitPopup()"></div>
+  <div id="exitPopup" class="hidden">
+    <button class="popup-close" onclick="closeExitPopup()">✕</button>
+    <div class="popup-icon" id="exitIcon">🛒</div>
+    <h3 id="exitTitle">Don't leave your cart behind!</h3>
+    <p id="exitMsg">You have items waiting. Claim 10% off and complete your order.</p>
+    <div id="exitCodeBox">
+      <div class="code-label">Your exclusive code (valid for 5 min), Please apply it now:</div>
+      <div class="code-box">
+        <span id="exitCodeText">Loading...</span>
+        <button class="btn-copy" onclick="copyExitCode()">Copy</button>
+      </div>
+      <div class="code-hint">Use this on the checkout page</div>
+    </div>
+    <div class="countdown-wrap">
+      <div class="countdown-block"><span id="exitCdMin">05</span><small>min</small></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block"><span id="exitCdSec">00</span><small>sec</small></div>
+    </div>
+    <div class="offer-bar-wrap"><div id="exitOfferBar" class="offer-bar"></div></div>
+    <div class="offer-label">Offer expires soon</div>
+    <button class="btn-primary" onclick="goToCheckoutWithCode()">🎁 Claim 10% Off and Checkout</button>
+    <button class="btn-dismiss" onclick="closeExitPopup()">No thanks, I will keep browsing</button>
+  </div>
+
+  <script>
+    /* ── CART STATE ─────────────────────────────────────────── */
+    let cartItems  = JSON.parse(sessionStorage.getItem("cartItems") || "[]");
+    let cartTotal  = parseFloat(sessionStorage.getItem("cartTotal") || "0");
+    let itemsAdded = parseInt(sessionStorage.getItem("cartCount")   || "0");
+
+    function totalQty() { return cartItems.reduce((s, i) => s + i.qty, 0); }
+
+    function persistCart() {
+      sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+      sessionStorage.setItem("cartTotal", cartItems.reduce((s, i) => s + i.price * i.qty, 0));
+      sessionStorage.setItem("cartCount", totalQty());
+    }
+
+    /* ── Restore UI on page load ────────────────────────────── */
+    window.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("cartCount").textContent = totalQty();
+
+      cartItems.forEach(item => {
+        const btn = document.querySelector(`.btn-add[data-name="${item.name}"]`);
+        if (btn) { btn.textContent = "✓ Added (" + item.qty + ")"; btn.classList.add("added"); }
+      });
+
+      if (totalQty() > 0) {
+        document.getElementById("urgencyBarWrap").style.display = "flex";
+        startUrgencyBar();
+        clearTimeout(nudgeTimer);
+      }
+    });
+
+    /* ── addToCart ──────────────────────────────────────────── */
+    function addToCart(btn) {
+      const name  = btn.dataset.name;
+      const price = parseFloat(btn.dataset.price);
+      const img   = btn.dataset.img;
+      const qty   = parseInt(document.getElementById("qty-" + name)?.value || 1);
+
+      const existing = cartItems.find(i => i.name === name);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cartItems.push({ name, price, qty, img });
+      }
+
+      persistCart();
+      itemsAdded = totalQty();
+
+      document.getElementById("cartCount").textContent = totalQty();
+      const newQty = cartItems.find(i => i.name === name).qty;
+      btn.textContent = "✓ Added (" + newQty + ")";
+      btn.classList.add("added");
+
+      document.getElementById("urgencyBarWrap").style.display = "flex";
+      if (!urgencyInterval) startUrgencyBar();
+
+      const toast = document.getElementById("addToast");
+      toast.textContent = qty + "x " + name + " added to cart!";
+      toast.style.display = "block";
+      setTimeout(() => { toast.style.display = "none"; }, 2000);
+
+      document.getElementById("passiveNudge").style.display = "none";
+      clearTimeout(nudgeTimer);
+    }
+
+    /* ── goToCheckout (cart float button) ───────────────────── */
+    function goToCheckout() {
+      if (totalQty() === 0) {
+        const t = document.getElementById("addToast");
+        t.textContent = "Add at least one item first";
+        t.style.display = "block";
+        setTimeout(() => { t.style.display = "none"; }, 2000);
+        return;
+      }
+      window.location.href = "index.html";
+    }
+
+    /* ── URGENCY BAR (30s on product page) ─────────────────── */
+    const URGENCY_TOTAL = 30;
+    let urgencyLeft = URGENCY_TOTAL, urgencyInterval = null;
+
+    function updateUrgencyBar() {
+      const pct = (urgencyLeft / URGENCY_TOTAL) * 100;
+      document.getElementById("urgencyBar").style.width = pct + "%";
+      const label = document.getElementById("urgencyLabel");
+      if (urgencyLeft <= 6) {
+        label.textContent = "Items in your cart are in high demand. Please purchase as soon as possible!";
+        document.getElementById("urgencyBar").style.background = "linear-gradient(90deg,#ff4444,#ff6b6b)";
+      } else if (urgencyLeft <= 12) {
+        label.textContent = "Items in your cart are in high demand.";
+      } else {
+        label.textContent = "🛒 Your cart is reserved";
+        document.getElementById("urgencyBar").style.background = "linear-gradient(90deg,#ff6b6b,#ffd93d)";
+      }
+    }
+
+    function startUrgencyBar() {
+      urgencyLeft = URGENCY_TOTAL; updateUrgencyBar();
+      urgencyInterval = setInterval(() => {
+        urgencyLeft--;
+        updateUrgencyBar();
+        if (urgencyLeft <= 0) {
+          clearInterval(urgencyInterval); urgencyInterval = null;
+          if (totalQty() > 0) showExitPopup();
+        }
+      }, 1000);
+    }
+
+    function resetUrgencyBar() {
+      if (totalQty() === 0) return;
+      if (urgencyInterval) { clearInterval(urgencyInterval); urgencyInterval = null; }
+      startUrgencyBar();
+    }
+
+    ["mousemove","keydown","click"].forEach(ev => document.addEventListener(ev, resetUrgencyBar));
+
+    /* ── Passive nudge timer ────────────────────────────────── */
+    let nudgeTimer = totalQty() === 0
+      ? setTimeout(() => { document.getElementById("passiveNudge").style.display = "block"; }, 15000)
+      : null;
+
+    /* ── EXIT-INTENT POPUP ──────────────────────────────────── */
+    let exitCode = null, exitCodeExpired = false, exitCdInterval = null;
+    const EXIT_CD_TOTAL = 300;
+    let exitCdLeft = EXIT_CD_TOTAL;
+
+    function genCode() {
+      const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let s = "";
+      for (let i = 0; i < 4; i++) s += c[Math.floor(Math.random() * c.length)];
+      return "SAVE" + s;
+    }
+
+    function showExitPopup() {
+      if (totalQty() === 0) return;
+      if (sessionStorage.getItem("discountUsed") === "true") return;
+      if (!document.getElementById("exitPopup").classList.contains("hidden")) return;
+
+      const q = totalQty();
+      document.getElementById("exitTitle").textContent = "Don't leave your cart behind!";
+      document.getElementById("exitMsg").textContent =
+        "You have " + q + " item" + (q > 1 ? "s" : "") + " waiting. Claim 10% off now.";
+
+      /* Only generate a new code if there isn't already a valid one */
+      if (!exitCode || exitCodeExpired) {
+        exitCode = genCode();
+        exitCodeExpired = false;
+      }
+      document.getElementById("exitCodeText").textContent = exitCode;
+      document.getElementById("exitCodeBox").style.opacity = "1";
+      /* Save to sessionStorage now so it's available however user navigates */
+      sessionStorage.setItem("exitDiscountCode", exitCode);
+
+      document.getElementById("overlay").classList.remove("hidden");
+      document.getElementById("exitPopup").classList.remove("hidden");
+      startExitCountdown();
+    }
+
+    function closeExitPopup() {
+      document.getElementById("exitPopup").classList.add("hidden");
+      document.getElementById("overlay").classList.add("hidden");
+      stopExitCountdown();
+    }
+
+    function copyExitCode() {
+      if (!exitCode) return;
+      navigator.clipboard.writeText(exitCode).then(() => {
+        const btn = document.querySelector("#exitCodeBox .btn-copy");
+        if (btn) { btn.textContent = "Copied!"; setTimeout(() => btn.textContent = "Copy", 2000); }
+      });
+    }
+
+    /* "Claim 10% Off and Checkout" — save code + auto-apply flag, then navigate */
+    function goToCheckoutWithCode() {
+      stopExitCountdown();
+      document.getElementById("exitPopup").classList.add("hidden");
+      document.getElementById("overlay").classList.add("hidden");
+      sessionStorage.setItem("exitDiscountAutoApply", "true");
+      window.location.href = "index.html";
+    }
+
+    function startExitCountdown() {
+      exitCdLeft = EXIT_CD_TOTAL; updateExitCd();
+      exitCdInterval = setInterval(() => {
+        exitCdLeft--;
+        if (exitCdLeft <= 0) {
+          stopExitCountdown(); exitCodeExpired = true; exitCode = null;
+          sessionStorage.removeItem("exitDiscountCode");
+          document.getElementById("exitCdMin").textContent = "00";
+          document.getElementById("exitCdSec").textContent = "00";
+          document.getElementById("exitOfferBar").style.width = "0%";
+          document.getElementById("exitTitle").textContent = "Offer Expired";
+          document.getElementById("exitMsg").textContent = "This discount has expired. Head to checkout to complete your order.";
+          document.getElementById("exitCodeBox").style.opacity = "0.4";
+          return;
+        }
+        updateExitCd();
+      }, 1000);
+    }
+
+    function updateExitCd() {
+      document.getElementById("exitCdMin").textContent = String(Math.floor(exitCdLeft/60)).padStart(2,"0");
+      document.getElementById("exitCdSec").textContent = String(exitCdLeft%60).padStart(2,"0");
+      document.getElementById("exitOfferBar").style.width = ((exitCdLeft/EXIT_CD_TOTAL)*100) + "%";
+    }
+
+    function stopExitCountdown() {
+      if (exitCdInterval) { clearInterval(exitCdInterval); exitCdInterval = null; }
+    }
+
+    /* Exit-intent: fires immediately on any mouseleave */
+    document.addEventListener("mouseleave", function handler() {
+      showExitPopup();
+      document.removeEventListener("mouseleave", handler);
+    });
+
+    /* Tab-switch detection */
+    document.addEventListener("visibilitychange", function handler() {
+      if (document.visibilityState === "hidden") {
+        showExitPopup();
+        document.removeEventListener("visibilitychange", handler);
+      }
+    });
+  </script>
+</body>
+</html>
