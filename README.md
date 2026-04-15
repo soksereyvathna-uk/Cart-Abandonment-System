@@ -1,4 +1,4 @@
-# OneStop — Cart Abandonment Prevention Prototype
+# OneStop -- Cart Abandonment Prevention Prototype
 
 A two-page e-commerce checkout prototype built for a university project, demonstrating **10 real-time cart abandonment prevention techniques** used by modern online retailers.
 
@@ -6,7 +6,7 @@ A two-page e-commerce checkout prototype built for a university project, demonst
 
 ## Overview
 
-Cart abandonment is one of the biggest challenges in e-commerce, with industry averages sitting above 70%. This prototype simulates how stores detect and respond to abandonment signals in real time — using urgency cues, personalised discount codes, behavioural triggers, and re-engagement flows — all without a backend.
+Cart abandonment is one of the biggest challenges in e-commerce, with industry averages sitting above 70%. This prototype simulates how stores detect and respond to abandonment signals in real time using urgency cues, personalised discount codes, behavioural triggers, and re-engagement flows all without a backend.
 
 The prototype has two pages:
 
